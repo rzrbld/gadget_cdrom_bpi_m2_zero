@@ -16,6 +16,6 @@ elif [ "$MODE" == "usb" ] ; then
 elif [ "$MODE" == "shutdown" ]; then
     true
 elif [ "$MODE" == "init" ]; then
-    ./init_iso_img.sh
+    source "/$IDIR/init_iso_img.sh"
     true
 fi

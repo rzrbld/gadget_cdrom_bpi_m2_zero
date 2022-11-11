@@ -238,7 +238,7 @@ class Display:
 
         self._disp = disp
         self._font = ImageFont.truetype(FONT, 13)
-        self._font_hdd = ImageFont.truetype(FONT, 52)
+        self._font_hdd = ImageFont.truetype(FONT, 32)
 
 
     def refresh(self, state):
