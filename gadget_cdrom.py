@@ -238,7 +238,7 @@ class Display:
 
         self._disp = disp
         self._font = ImageFont.truetype(FONT, 13)
-        self._font_hdd = ImageFont.truetype(FONT, 32)
+        self._font_hdd = ImageFont.truetype(FONT, 26)
 
 
     def refresh(self, state):
@@ -249,8 +249,15 @@ class Display:
         image = Image.new('1', (self._disp.WIDTH_RES, self._disp.HEIGHT_RES), "WHITE")
         draw = ImageDraw.Draw(image)
 
-        if state.get_mode() in (MODE_HDD, MODE_SHUTDOWN, MODE_INIT):
+        if state.get_mode() in (MODE_HDD, MODE_SHUTDOWN):
             draw.text((0,0), mode_text, font=self._font_hdd)
+            self._disp.display_image(image)
+            return
+
+        if state.get_mode() in (MODE_INIT):
+            draw.text((0,0), "INIT. plz wait.", font=self._font)
+            draw.text((0,15), "bpi will be", font=self._font)
+            draw.text((0,30), "auto reboot", font=self._font)
             self._disp.display_image(image)
             return
 

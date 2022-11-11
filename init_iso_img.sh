@@ -6,6 +6,13 @@ if [ -f "$FILE" ]; then
     exit 0
 fi
 
+resize2fs_status="$(systemctl is-enabled armbian-resize-filesystem)"
+if [[ $resize2fs_status == "enabled" ]]; then
+    sleep 5
+    ./$0
+    exit 1
+fi
+
 free="$(df -k / | tail -n1 | awk '{print $4}')"
 size=$(($free-(1024*1024*2)))
 if [ "$size" -lt "$((free/2))" ]; then
