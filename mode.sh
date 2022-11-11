@@ -15,4 +15,7 @@ elif [ "$MODE" == "usb" ] ; then
     mount "$(losetup -PLf /iso.img --show)p1" /iso
 elif [ "$MODE" == "shutdown" ]; then
     true
+elif [ "$MODE" == "init" ]; then
+    ./init_iso_img.sh
+    true
 fi

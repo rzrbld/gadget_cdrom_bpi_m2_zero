@@ -16,8 +16,9 @@ MODE_CD = "cd"
 MODE_HDD = "hdd"
 MODE_USB = "usb"
 MODE_SHUTDOWN = "shutdown"
+MODE_INIT = "init"
 
-ALL_MODES = [MODE_CD, MODE_HDD, MODE_USB, MODE_SHUTDOWN]
+ALL_MODES = [MODE_CD, MODE_HDD, MODE_USB, MODE_SHUTDOWN, MODE_INIT]
 BROWSE_MODES = [MODE_CD, MODE_USB]
 
 FILE_EXTS = {
@@ -127,7 +128,12 @@ class State:
         self._mode = None
         self._iso_name = None
         self._iso_ls_cache = None
-        self.set_mode(MODE_CD)
+
+        if not os.path.isfile('/iso.img'):
+            self.set_mode(MODE_INIT)
+        else:
+            self.set_mode(MODE_CD)
+
 
     def inserted_iso(self):
         if self._iso_name is not None:
@@ -221,6 +227,10 @@ class State:
         script = os.path.join(APP_DIR, "shutdown.sh")
         subprocess.check_call((script,))
 
+    def init_image(self):
+        script = os.path.join(APP_DIR, "init_iso_img.sh")
+        subprocess.check_call((script,))
+
 
 class Display:
     def __init__(self):
@@ -239,7 +249,7 @@ class Display:
         image = Image.new('1', (self._disp.WIDTH_RES, self._disp.HEIGHT_RES), "WHITE")
         draw = ImageDraw.Draw(image)
 
-        if state.get_mode() in (MODE_HDD, MODE_SHUTDOWN):
+        if state.get_mode() in (MODE_HDD, MODE_SHUTDOWN, MODE_INIT):
             draw.text((0,0), mode_text, font=self._font_hdd)
             self._disp.display_image(image)
             return
