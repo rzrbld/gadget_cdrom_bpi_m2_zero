@@ -57,7 +57,7 @@ InstallCDROMGadget(){
 	rm /root/.not_logged_in_yet
 	export LANG=C LC_ALL="en_US.UTF-8"
 	# install requred packcges
-	apt update -y -q && apt install -y -q sed git vim p7zip-full armbian-config python3-smbus python3-numpy python3-pil fonts-dejavu ntfs-3g python3-dev python3-pip zip unzip dosfstools
+	apt update -y -q && apt install -y -q sed git vim p7zip-full armbian-config python3-smbus python3-numpy python3-pil fonts-dejavu ntfs-3g python3-dev python3-pip zip unzip dosfstools && \
 
 	#make a file for wiringPi
 	mkdir /var/lib/bananapi/ && touch /var/lib/bananapi/board.sh
@@ -92,8 +92,8 @@ InstallCDROMGadget(){
     sed -i '/g_ether/d' /etc/modules
 
     # add cdrom_gadget to systemd
-    sudo ln -s /opt/gadget_cdrom/gadget_cdrom.service /etc/systemd/system/gadget_cdrom.service && \
-    sudo systemctl enable gadget_cdrom.service
+    ln -s /opt/gadget_cdrom/gadget_cdrom.service /etc/systemd/system/gadget_cdrom.service && \
+    systemctl enable gadget_cdrom.service
 
 }
 
