@@ -68,7 +68,8 @@ InstallCDROMGadget(){
 	if packageIsInstaled git; then
 			mkdir -p /opt/BPI-WiringPi2 && git clone https://github.com/bontango/BPI-WiringPi2.git /opt/BPI-WiringPi2/
 			mkdir -p /opt/RPi.GPIO && git clone https://github.com/GrazerComputerClub/RPi.GPIO.git /opt/RPi.GPIO
-			mkdir -p /opt/gadget_cdrom && git clone https://github.com/tjmnmk/gadget_cdrom.git /opt/gadget_cdrom
+			mkdir -p /opt/gadget_cdrom && git clone https://github.com/rzrbld/gadget_cdrom_bpi_m2_zero.git /opt/gadget_cdrom
+			# mkdir -p /opt/gadget_cdrom && git clone https://github.com/tjmnmk/gadget_cdrom.git /opt/gadget_cdrom
 	else
 			echo "Doh!"
 	fi
