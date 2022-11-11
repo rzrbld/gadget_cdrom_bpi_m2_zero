@@ -93,7 +93,9 @@ InstallCDROMGadget(){
 
     # add cdrom_gadget to systemd
     ln -s /opt/gadget_cdrom/gadget_cdrom.service /etc/systemd/system/gadget_cdrom.service && \
+    ln -s /opt/gadget_cdrom/gadget_cdrom_auto_img.service /etc/systemd/system/gadget_cdrom_auto_img.service && \
     systemctl enable gadget_cdrom.service
+	systemctl enable gadget_cdrom_auto_img.service
 
 }
 

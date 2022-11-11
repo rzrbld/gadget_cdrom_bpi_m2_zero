@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/bash -ue
 
 IDIR="${BASH_SOURCE%/*}"
 if [[ ! -d "$IDIR" ]]; then IDIR="$PWD"; fi
@@ -16,6 +16,5 @@ elif [ "$MODE" == "usb" ] ; then
 elif [ "$MODE" == "shutdown" ]; then
     true
 elif [ "$MODE" == "init" ]; then
-    source "/$IDIR/init_iso_img.sh"
     true
 fi

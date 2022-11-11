@@ -1,5 +1,5 @@
 [Unit]
-Description=gadget_cdrom
+Description=gadget_cdrom_image_creation
 Before=basic.target
 After=local-fs.target sysinit.target
 DefaultDependencies=no
@@ -8,8 +8,7 @@ DefaultDependencies=no
 Type=simple
 User=root
 WorkingDirectory=/opt/gadget_cdrom
-ExecStartPre=/opt/gadget_cdrom/create_image.sh auto
-ExecStart=/opt/gadget_cdrom/gadget_cdrom.py
+ExecStart=/opt/gadget_cdrom/init_iso_img.sh
 Restart=on-failure
 
 [Install]
