@@ -1,4 +1,4 @@
-#!/bin/bash -ue
+#!/bin/bash
 
 FILE="/iso.img"
 
@@ -10,7 +10,7 @@ resize2fs_status="$(systemctl is-enabled armbian-resize-filesystem)"
 if [[ $resize2fs_status == "enabled" ]]; then
     sleep 5
     ./$0
-    exit 1
+    exit 0
 fi
 
 free="$(df -k / | tail -n1 | awk '{print $4}')"

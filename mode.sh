@@ -1,4 +1,4 @@
-#! /bin/bash -eu
+#! /bin/bash
 
 IDIR="${BASH_SOURCE%/*}"
 if [[ ! -d "$IDIR" ]]; then IDIR="$PWD"; fi
