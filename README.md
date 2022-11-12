@@ -1,43 +1,123 @@
 # gadget\_cdrom
+Based on [tjmnmk](https://github.com/tjmnmk/) [gadget_cdrom](https://github.com/tjmnmk/gadget_cdrom)
 ## Requirements
-* Raspberry Pi Zero (2) (W)
+* [Banana Pi M2 Zero](https://www.banana-pi.org/en/banana-pi-sbcs/1.html)
 * [Waveshare 1.3inch OLED HAT](https://www.waveshare.com/wiki/1.3inch_OLED_HAT)
-* Tested on Rasberry Pi OS Buster, Bullseye and [DietPi](https://dietpi.com) Bullseye
+* Tested on [Armbian](https://www.armbian.com/) jammy current (5.15.77)
 
 ## Description
-* gadget\_cdrom converts your Raspberry Pi to virtual usb cdrom.
-* https://video.ploud.fr/videos/watch/6d0b1014-bb39-4714-a984-15a24a9ac58e
-* https://www.youtube.com/watch?v=DntezzK9Eqc
+* gadget\_cdrom converts your Banana Pi M2 Zero to virtual usb cdrom.
+* [Original tjmnmk Youtube video](https://www.youtube.com/watch?v=DntezzK9Eqc)
 
-## Usage
-* You can switch between HDD mode, virtual cdrom mode, and virtual flash drive mode.
-* HDD mode - in that mode your Raspberry Pi is basically USB flash drive connected to your computer.
-* CD mode - in that mode you select some iso you uploaded to Raspberry Pi in
-  HDD mode, and the rpi will pretend to be that cdrom.
-* USB mode - the rpi will pretend to be a flash drive, presenting the usb .img
-  you selected.
+# Usage
+You can switch between HDD mode, virtual cdrom mode, and virtual flash drive mode.
 
-### Keys
-* Key1 - Activate selected image
-* Key2 - Deactivate image
-* Key3 - Change mode
-* Joystick Down - next image
-* Joystick Up - previous image
-* Joystick Left - shutdown / power on
+| Mode     |      Description      |  Button |
+|----------|:---------------------:|------:|
+| `CD Mode`  |  the BPI will pretend to be a cdrom and presenting the `.iso` you selected | `Key3` |
+| `USB Mode` |  the BPI will pretend to be a flash drive, presenting the usb `.img` you selected.   |   `Key3` |
+| `HDD Mode` | in that mode your Banana Pi M2 Zero is basically USB flash drive connected to your computer. You can store any files and upload `.iso` and `.img` files to use in `CD` and `USB` Modes |    `Key3` |
+| `Shutdown` | Halt/Shutdown PBI |  `Joystick Left` |
+| `Init`     | State that you'll see during internal storage initialization process after first boot | `-` |
 
-## RPI Images
-### DietPi + gadget_cdrom image
-There are customized DietPi images with gadget_cdrom and kernel patch for big isos in the [releases section](https://github.com/tjmnmk/gadget_cdrom/releases), just write it to sd-card (you can use rpi-imager, dd, etc.), turn rpi on and wait a few minutes to get everything ready.
 
-## Manual Installation
-### Install dependencies
+## Keys
+* `Key1` - Activate selected image
+* `Key2` - Deactivate image
+* `Key3` - Change mode
+* `Joystick Down` - next image (only in CD/USB modes)
+* `Joystick Up` - previous image (only in CD/USB modes)
+* `Joystick Left` - shutdown
+
+# BPI Images options
+## Ready to use [Armbian](https://www.armbian.com/) + gadget_cdrom image
+There are customized Armbian images with gadget_cdrom and kernel patch for big isos in the [releases section](https://github.com/rzrbld/gadget_cdrom_bpi_m2_zero/releases), just write it to sd-card (you can use rpi-imager, dd, etc.), turn BPI on and wait a few minutes to get everything ready.
+
+## Build your own Armbian image
+- chekout current `armbian-build` repo `git clone https://github.com/armbian/build.git` 
+
+- chekout current `gadget_cdrom_bpi_m2_zero` repo `git clone -b banana_pi_m2_zero https://github.com/rzrbld/gadget_cdrom_bpi_m2_zero.git` 
+
+- copy `userpatches` form `gadget_cdrom_bpi_m2_zero` directory to armbian  `build` folder `cp -r /git/gadget_cdrom_bpi_m2_zero/armbian/banapi_m2_zero/userpatches/* /git/build/userpatches/`
+
+- compile image `cd /git/build/ && ./compile.sh BOARD=bananapim2zero BRANCH=current RELEASE=jammy BUILD_MINIMAL=yes BUILD_DESKTOP=no KERNEL_ONLY=no KERNEL_CONFIGURE=no COMPRESS_OUTPUTIMAGE=sha,gpg,gz` in case of error with debian repos - add this parameters `DEBIAN_MIRROR='%my_favorite_mirror%' NO_APT_CACHER=yes` [list of Debian mirrors](https://www.debian.org/mirror/list) i.e. `cd /git/build/ && ./compile.sh BOARD=bananapim2zero BRANCH=current RELEASE=jammy BUILD_MINIMAL=yes BUILD_DESKTOP=no KERNEL_ONLY=no KERNEL_CONFIGURE=no COMPRESS_OUTPUTIMAGE=sha,gpg,gz DEBIAN_MIRROR='ftp.ru.debian.org/debian/' NO_APT_CACHER=yes`
+
+
+### Userpatches
+```bash
+ banapi_m2_zero
+    └── userpatches
+        ├── customize-image.sh #pre install gadget cdrom
+        ├── kernel #patch for support isos bigger than ~2.5GB (Optional)
+        ├── linux-sunxi-current.config #default linux kernel config (ensure that SPIDEV & Mass Storage is set to <m>/<y>)
+        └── README.md #compile parameters
 ```
-sudo apt install -y p7zip-full python3-rpi.gpio python3-smbus python3-spidev \
-                    python3-numpy python3-pil fonts-dejavu ntfs-3g
+
+# Manual Installation
+### Install dependencies
+```bash
+apt update -y -q && \
+apt install -y -q sed \
+                  git \
+                  vim p7zip-full \
+                  armbian-config \
+                  python3-smbus \
+                  python3-numpy \
+                  python3-pil \
+                  fonts-dejavu \
+                  ntfs-3g \
+                  python3-dev \
+                  python3-pip \
+                  zip \
+                  unzip \
+                  dosfstools 
+```
+
+### Create a file for wiringPi 
+```bash
+#make a file for wiringPi
+mkdir /var/lib/bananapi/ && touch /var/lib/bananapi/board.sh
+echo "BOARD=bpi-m2z" >> /var/lib/bananapi/board.sh
+echo "BOARD_AUTO=bpi-m2z" >> /var/lib/bananapi/board.sh
+```
+
+### Checkout patched WiringPi2, RPi.GPIO repos and gadget_cdrom (Banana-pi edition) 
+```bash
+mkdir -p /opt/BPI-WiringPi2 && git clone https://github.com/bontango/BPI-WiringPi2.git /opt/BPI-WiringPi2/
+mkdir -p /opt/RPi.GPIO && git clone https://github.com/GrazerComputerClub/RPi.GPIO.git /opt/RPi.GPIO
+mkdir -p /opt/gadget_cdrom && git clone --branch dev https://github.com/rzrbld/gadget_cdrom_bpi_m2_zero.git /opt/gadget_cdrom
+```
+
+### Install Python dependencies
+```bash
+#install pip deps
+pip3 install wheel && pip3 install spidev
+```
+
+### Build patched [WiringPi](https://github.com/bontango/BPI-WiringPi2) for BPI
+```bash
+cd /opt/BPI-WiringPi2/ && ./build
+```
+
+### Build [PRi.GPIO](https://github.com/GrazerComputerClub/RPi.GPIO) for BPI
+```bash	
+cd /opt/RPi.GPIO/ && CFLAGS="-fcommon" python3 setup.py install
+```
+
+### Enable spi-spidev
+```bash
+echo "overlays=spi-spidev" >> /boot/armbianEnv.txt
+echo "param_spidev_spi_bus=0" >> /boot/armbianEnv.txt
+```
+
+### Remove conflicted modules 
+```bash
+sed -i '/g_serial/d' /etc/modules
+sed -i '/g_ether/d' /etc/modules
 ```
 
 ### Prepare storage
-```sh
+```bash
 # sudo ./create_image.sh
 Space available: 24G
 Size, e.g. 16G? 8G"
@@ -45,34 +125,26 @@ Creating 8G image...
 Done!
 ```
 
-### Load modules after boot
-* Add ```dtoverlay=dwc2``` to /boot/config.txt
-* Add ```dwc2``` to /etc/modules
-* Enable SPI
-```
-sudo raspi-config
-Interfacing Options
-SPI
-Yes
+### Reboot
+```bash
+reboot
 ```
 
-### Install gadget\_cdrom
-* Clone gadget_cdrom
+### Check is everything is ok
+```bash
+gpio readall #shows pinout table 
+ls -al /dev/spi* #shows spi device
 ```
-cd /opt
-sudo git clone https://github.com/tjmnmk/gadget_cdrom.git
-```
-* Enable systemd service:
-```
-sudo ln -s /opt/gadget_cdrom/gadget_cdrom.service /etc/systemd/system/gadget_cdrom.service
-sudo systemctl enable gadget_cdrom.service
-```
-* reboot rpi
-```
-sudo reboot
-```
+
+### Add cdrom_gadget to systemd and start
+```bash
+ln -s /opt/gadget_cdrom/gadget_cdrom.service /etc/systemd/system/gadget_cdrom.service && \
+systemctl enable gadget_cdrom.service
+systemctl start gadget_cdrom.service
+```    
+
 
 ### Optional
-#### Recompile kernel for support isos bigger than ~2.5GB
+**Recompile kernel for support isos bigger than ~2.5GB**
 * Apply this [patch](../master/tools/kernel/00-remove_iso_limit.patch)
-* Build kernel: https://www.raspberrypi.org/documentation/linux/kernel/building.md
+* Build kernel: [Armbian Linux Build Framework](https://github.com/armbian/build)
