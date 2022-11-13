@@ -20,14 +20,15 @@ if [ "$size" -lt "$((free/2))" ]; then
     size=$((free/2))
 fi
 size="${size}k"
-part_type="msftdata"
+part_type="ntfs"
  
 echo "Creating $size image..."  1>&2
 
 fallocate -l "$size" "$FILE"
 dev="$(losetup -fL --show "$FILE")"
+
 parted "$dev" mklabel gpt
-parted "$dev" mkpart p "$part_type" 1M 100%
+parted "$dev" mkpart p "$part_type" 2M 100%
 
 mkfs.exfat -n BPiHDD "${dev}p1"
 
