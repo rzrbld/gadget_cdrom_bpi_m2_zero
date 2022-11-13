@@ -78,7 +78,7 @@ if [ "$sel_fs_type" = "ntfs" ]; then
 elif [ "$sel_fs_type" = "fat32" ]; then
     mkfs.vfat "${dev}p1"
     fatlabel "${dev}p1" "$part_label"
-elif [ "$sel_fs_type" = "exfat"]; then 
+elif [ "$sel_fs_type" = "exfat" ]; then 
     mkfs.exfat -n "$part_label" "${dev}p1"
 else
     exit 1
