@@ -73,12 +73,12 @@ dev="$(losetup -fL --show "$FILE")"
 parted "$dev" mklabel "$sel_part_type"
 parted "$dev" mkpart p "$fs_type" "$part_offset" 100%
 
-if [ "$part_type" = "ntfs" ]; then
+if [ "$sel_fs_type" = "ntfs" ]; then
     mkfs.ntfs -fL "$part_label" "${dev}p1"
-elif [ "$part_type" = "fat32" ]; then
+elif [ "$sel_fs_type" = "fat32" ]; then
     mkfs.vfat "${dev}p1"
     fatlabel "${dev}p1" "$part_label"
-elif [ "$part_type" = "exfat"]; then 
+elif [ "$sel_fs_type" = "exfat"]; then 
     mkfs.exfat -n "$part_label" "${dev}p1"
 else
     exit 1
