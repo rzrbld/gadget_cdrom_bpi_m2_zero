@@ -57,7 +57,7 @@ InstallCDROMGadget(){
 	rm /root/.not_logged_in_yet
 	export LANG=C LC_ALL="en_US.UTF-8"
 	# install requred packcges
-	apt update -y -q && apt install -y -q sed git vim p7zip-full armbian-config python3-smbus python3-numpy python3-pil fonts-dejavu ntfs-3g python3-dev python3-pip zip unzip dosfstools && \
+	apt update -y -q && apt install -y -q exfat-fuse exfatprogs sed git vim p7zip-full armbian-config python3-smbus python3-numpy python3-pil fonts-dejavu ntfs-3g python3-dev python3-pip zip unzip dosfstools && \
 
 	#make a file for wiringPi
 	mkdir /var/lib/bananapi/ && touch /var/lib/bananapi/board.sh
@@ -71,6 +71,7 @@ InstallCDROMGadget(){
 			mkdir -p /opt/gadget_cdrom && git clone --branch banana_pi_m2_zero https://github.com/rzrbld/gadget_cdrom_bpi_m2_zero.git /opt/gadget_cdrom
 	else
 			echo "Doh!"
+			exit 1
 	fi
 
 	#install pip deps
