@@ -46,7 +46,7 @@ echo "Creating $size image..."
 
 fallocate -l "$size" "$FILE"
 dev="$(losetup -fL --show "$FILE")"
-parted "$dev" mklabel msdos
+parted "$dev" mklabel gpt
 parted "$dev" mkpart p "$part_type" 1M 100%
 
 if [ "$part_type" = "ntfs" ]; then
