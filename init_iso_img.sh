@@ -20,7 +20,7 @@ if [ "$size" -lt "$((free/2))" ]; then
     size=$((free/2))
 fi
 size="${size}k"
-part_type="ext4"
+part_type="fat32"
  
 echo "Creating $size image..."  1>&2
 
