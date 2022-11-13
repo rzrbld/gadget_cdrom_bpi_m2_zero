@@ -20,13 +20,13 @@ if [ "$size" -lt "$((free/2))" ]; then
     size=$((free/2))
 fi
 size="${size}k"
-part_type="fat32"
+part_type="msftdata"
  
 echo "Creating $size image..."  1>&2
 
 fallocate -l "$size" "$FILE"
 dev="$(losetup -fL --show "$FILE")"
-parted "$dev" mklabel msdos
+parted "$dev" mklabel gpt
 parted "$dev" mkpart p "$part_type" 1M 100%
 
 mkfs.exfat -n BPiHDD "${dev}p1"
