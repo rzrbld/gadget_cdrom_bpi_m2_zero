@@ -9,7 +9,7 @@ fi
 
 resize2fs_status="$(systemctl is-enabled armbian-resize-filesystem)"
 if [[ $resize2fs_status == "enabled" ]]; then
-    sleep 30
+    sleep 40
     echo "armbian-resize-filesystem in progress" 2>&1
     exit 1
 fi
@@ -20,7 +20,7 @@ if [ "$size" -lt "$((free/2))" ]; then
     size=$((free/2))
 fi
 size="${size}k"
-part_type="ntfs"
+part_type="ext4"
  
 echo "Creating $size image..."  1>&2
 
@@ -29,7 +29,7 @@ dev="$(losetup -fL --show "$FILE")"
 parted "$dev" mklabel msdos
 parted "$dev" mkpart p "$part_type" 1M 100%
 
-mkfs.ntfs -fL RPiHDD "${dev}p1"
+mkfs.exfat -n BPiHDD "${dev}p1"
 
 losetup -d "$dev"
 sync
