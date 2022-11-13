@@ -29,9 +29,12 @@ You can switch between HDD mode, virtual cdrom mode, and virtual flash drive mod
 * `Joystick Up` - previous image (only in CD/USB modes)
 * `Joystick Left` - shutdown
 
+## Performance
+In HDD Mode with `MicroSDXC Kingston CANVAS Select Plus 1st class V10 A1 64GB` as main storage, my file transfer speed is around 7-8MB/s for read and write.
+
 # BPI Images options
 ## Ready to use [Armbian](https://www.armbian.com/) + gadget_cdrom image
-There are customized Armbian images with gadget_cdrom and kernel patch for big isos in the [releases section](https://github.com/rzrbld/gadget_cdrom_bpi_m2_zero/releases), just write it to sd-card (you can use rpi-imager, dd, etc.), turn BPI on and wait a few minutes to get everything ready.
+There are customized Armbian images with gadget_cdrom and kernel patch for big isos in the [releases section](https://github.com/rzrbld/gadget_cdrom_bpi_m2_zero/releases), just write it to sd-card (you can use rpi-imager, dd, etc.), turn BPI on and wait a few minutes (5-7) to get everything ready. Latest prebuild images uses [exFAT](https://en.wikipedia.org/wiki/ExFAT) as defaut HDD Mode partition `iso.img`.
 
 ## Build your own Armbian image
 - chekout current `armbian-build` repo `git clone https://github.com/armbian/build.git` 
@@ -66,6 +69,8 @@ apt install -y -q sed \
                   python3-pil \
                   fonts-dejavu \
                   ntfs-3g \
+                  exfat-fuse \
+                  exfatprogs \
                   python3-dev \
                   python3-pip \
                   zip \
@@ -85,7 +90,7 @@ echo "BOARD_AUTO=bpi-m2z" >> /var/lib/bananapi/board.sh
 ```bash
 mkdir -p /opt/BPI-WiringPi2 && git clone https://github.com/bontango/BPI-WiringPi2.git /opt/BPI-WiringPi2/
 mkdir -p /opt/RPi.GPIO && git clone https://github.com/GrazerComputerClub/RPi.GPIO.git /opt/RPi.GPIO
-mkdir -p /opt/gadget_cdrom && git clone --branch dev https://github.com/rzrbld/gadget_cdrom_bpi_m2_zero.git /opt/gadget_cdrom
+mkdir -p /opt/gadget_cdrom && git clone --branch banana_pi_m2_zero https://github.com/rzrbld/gadget_cdrom_bpi_m2_zero.git /opt/gadget_cdrom
 ```
 
 ### Install Python dependencies
