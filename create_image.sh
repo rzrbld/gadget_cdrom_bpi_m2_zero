@@ -62,6 +62,8 @@ fi
 
 if [ "$sel_part_type" = "gpt" ]; then
     part_offset="2M"
+else
+    part_offset="1M"
 fi
  
 echo "Creating $size image..."
